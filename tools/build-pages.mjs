@@ -2,6 +2,7 @@
 import {readFile,writeFile,readdir,mkdir,copyFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
 import {BACKEND as LOCAL_BACKEND} from '../app/backend-config.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const args=Object.fromEntries(process.argv.slice(2).map(v=>{const [k,...rest]=v.replace(/^--/,'').split('=');return [k,rest.join('=')];}));
@@ -44,7 +45,16 @@ const out=path.resolve(root,args.out||'site-dist');
 if(!out.startsWith(root+path.sep)||out===root)throw Error('Output must be a new directory inside this workspace');
 if((await readdir(out).catch(()=>[])).length)throw Error('Output is not empty; choose a new directory (no automatic deletion)');
 await mkdir(path.join(out,'app'),{recursive:true});
-const rewrite=text=>text.replace(/(["'`(])\/(app|assets|ui)\//g,(_,prefix,dir)=>prefix+base+dir+'/');
+const optimize=environment==='production'&&args.optimize!=='false';
+const release=environment==='production'?(process.env.GITHUB_SHA||createHash('sha256').update(await readFile(path.join(root,'app/app.js'))).update(await readFile(path.join(root,'app/style.css'))).digest('hex')).slice(0,12):null;
+const rewrite=(text,relative='')=>{
+ if(release)text=text.replace(/(["'])(\.{1,2}\/[^"'\n]+\.js)\1/g,(_,quote,url)=>quote+url+'?v='+release+quote).replace(/(["'])(\/app\/[^"'\n]+\.(?:js|css))\1/g,(_,quote,url)=>quote+url+'?v='+release+quote);
+ if(optimize){
+  if(['app/config.js','app/rosette-buttons.js'].includes(relative))text=text.replaceAll('.png','.png.webp');
+  else text=text.replace(/(\/assets\/[^"'`\n]+?\.png)(?!\.webp)/g,'$1.webp');
+ }
+ return text.replace(/(["'`(])\/(app|assets|ui)\//g,(_,prefix,dir)=>prefix+base+dir+'/');
+};
 const modules=new Set();
 async function moduleFile(relative){
  if(modules.has(relative))return;modules.add(relative);
@@ -53,9 +63,12 @@ async function moduleFile(relative){
  for(const match of source.matchAll(/(?:from\s*|import\s*)['"](\.\.?\/[^'"]+\.js)['"]/g))
   await moduleFile(path.posix.normalize(path.posix.join(path.posix.dirname(relative),match[1])));
  const target=path.join(out,relative);await mkdir(path.dirname(target),{recursive:true});
- await writeFile(target,rewrite(source));
+ await writeFile(target,rewrite(source,relative));
 }
 await moduleFile('app/app.js');
+await moduleFile('app/webp-worker.js');
+await copyFile(path.join(root,'app/vendor/webp/webp_enc.wasm'),path.join(out,'app/vendor/webp/webp_enc.wasm'));
+await copyFile(path.join(root,'app/vendor/webp/LICENSE'),path.join(out,'app/vendor/webp/LICENSE'));
 if(environment==='production'){
  await moduleFile('app/admin.js');
  await writeFile(path.join(out,'app/admin.html'),rewrite(await readFile(path.join(root,'production/frontend/admin.html'),'utf8')));
@@ -71,17 +84,29 @@ for(const css of ['style.css','short-screen.css','oct09.css'])
 const allowed=new Set(['.png','.jpg','.jpeg','.webp','.svg','.gif','.ttf','.otf','.woff','.woff2']);
 // These two reference rasters are used by the existing tool icons/gold frame.
 const productionUi=new Set(['ui/03包装礼盒.jpg','ui/unfolded gifts03.jpg']);
+let sharp,originalImageBytes=0,optimizedImageBytes=0;
+if(optimize){sharp=(await import('sharp')).default;sharp.concurrency(2);await mkdir(path.join(root,'.local-data/asset-cache'),{recursive:true});}
 async function assets(relative){
- for(const entry of await readdir(path.join(root,relative),{withFileTypes:true})){
+ const entries=await readdir(path.join(root,relative),{withFileTypes:true});
+ for(const entry of entries){
   if(entry.name.startsWith('.'))continue;
   const item=path.join(relative,entry.name);
   if(entry.isDirectory())await assets(item);
   else if(entry.isFile()&&allowed.has(path.extname(entry.name).toLowerCase())&&(environment!=='production'||!relative.startsWith('ui')||productionUi.has(item.split(path.sep).join('/')))){
-   const target=path.join(out,item);await mkdir(path.dirname(target),{recursive:true});await copyFile(path.join(root,item),target);
+   if(relative==='app/fonts'&&/\.(ttf|otf)$/.test(entry.name)&&entries.some(e=>e.name===entry.name.replace(/\.(ttf|otf)$/,'.woff2')))continue;
+   const png=optimize&&item.startsWith('assets'+path.sep)&&entry.name.endsWith('.png');
+   const target=path.join(out,item+(png?'.webp':''));await mkdir(path.dirname(target),{recursive:true});
+   if(png){
+    const source=await readFile(path.join(root,item)),key=createHash('sha256').update('lossless-webp-effort2-v1').update(source).digest('hex');
+    const cached=path.join(root,'.local-data/asset-cache',key+'.webp');let encoded;
+    try{encoded=await readFile(cached);}catch{encoded=await sharp(source).webp({lossless:true,effort:2}).toBuffer();await writeFile(cached,encoded);}
+    originalImageBytes+=source.length;optimizedImageBytes+=encoded.length;await writeFile(target,encoded);
+   }else await copyFile(path.join(root,item),target);
   }
  }
 }
 for(const folder of ['assets','ui','app/fonts'])await assets(folder);
 await writeFile(path.join(out,'.nojekyll'),'');
-await writeFile(path.join(out,'deployment.json'),JSON.stringify({environment,batchId:runtime.batchId,base,...(BACKEND.siteUrl?{siteUrl:BACKEND.siteUrl}:{})},null,2));
+await writeFile(path.join(out,'deployment.json'),JSON.stringify({environment,batchId:runtime.batchId,base,...(release?{release}:{}),...(BACKEND.siteUrl?{siteUrl:BACKEND.siteUrl}:{})},null,2));
 console.log('Static Pages artifact: '+out+' (environment='+environment+', base='+base+')');
+if(optimize)console.log(JSON.stringify({losslessImageBytesBefore:originalImageBytes,losslessImageBytesAfter:optimizedImageBytes}));

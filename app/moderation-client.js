@@ -2,6 +2,8 @@ import {BACKEND} from './backend-config.js';
 import {mediaCredentials,moderationRequest} from './service.js';
 import {loadImage,PHOTO_WINDOW} from './renderer.js';
 import {timeSend} from './send-timing.js';
+import {encodeWebp} from './webp.js';
+import {releaseCanvas} from './render-resources.js';
 // Exact same placement as renderPhoto's photo window, without frame or hidden pixels.
 export async function croppedModerationImage(g){
  if(!g.image)throw Error('MISSING_CROP');
@@ -12,7 +14,7 @@ export async function croppedModerationImage(g){
  if(Math.abs(aspect-w/h)>.00001)throw Error('CROP_GEOMETRY_MISMATCH');
  const scale=Math.max(w/im.width,h/im.height)*crop.scale,iw=im.width*scale,ih=im.height*scale;
  ctx.drawImage(im,(w-iw)/2+(crop.x||0)*w,(h-ih)/2+(crop.y||0)*h,iw,ih);
- const blob=await new Promise(resolve=>c.toBlob(resolve,'image/webp',.95));
+ let blob;try{blob=await encodeWebp(c,.95);}finally{releaseCanvas(c);}
  if(!blob||blob.type!=='image/webp'||blob.size>1500000)throw Error('INVALID_CROP');return blob;
 }
 export async function moderateSubmission(task,submissionId,timing){

@@ -27,6 +27,8 @@ jobs:
         with:
           node-version: '24'
       - uses: actions/configure-pages@v5
+      - name: Install pinned build dependencies
+        run: npm ci
       - name: Write public production configuration
         env:
           LIWU_URL: ${{ vars.LIWU_PRODUCTION_SUPABASE_URL }}
