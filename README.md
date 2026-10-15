@@ -2,7 +2,7 @@
 
 Static frontend for GitHub Pages, with Supabase Edge Functions/PostgreSQL and a private Cloudflare R2 bucket.
 
-- Website: https://riwoo1022.com/
+- Website: https://www.riwoo1022.com/
 - Administrator sign-in: https://riwoo1022.com/app/admin.html
 - Production deployment instructions: [production/README.md](production/README.md)
 
