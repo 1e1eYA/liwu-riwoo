@@ -5,8 +5,10 @@ export async function renderExportAsset(snapshot,index){
  try{
   original=await exportImage(snapshot,index);
   const blob=await toBlob(original),scale=Math.min(1,600/Math.max(original.width,original.height));
-  thumbnail=document.createElement('canvas');thumbnail.width=Math.max(1,Math.round(original.width*scale));thumbnail.height=Math.max(1,Math.round(original.height*scale));
-  thumbnail.getContext('2d').drawImage(original,0,0,thumbnail.width,thumbnail.height);
-  return {blob,preview:await toBlob(thumbnail)};
+  try{
+   thumbnail=document.createElement('canvas');thumbnail.width=Math.max(1,Math.round(original.width*scale));thumbnail.height=Math.max(1,Math.round(original.height*scale));
+   thumbnail.getContext('2d').drawImage(original,0,0,thumbnail.width,thumbnail.height);
+   return {blob,preview:await toBlob(thumbnail)};
+  }catch{return {blob,preview:null};}
  }finally{releaseCanvas(original);releaseCanvas(thumbnail);}
 }
