@@ -1,0 +1,104 @@
+/* ui/*.jpg: 1179 × 2100 reference. Each screen lays out in the live viewport.
+   Width controls horizontal proportions; height controls anchors and available space.
+   No fixed artwork canvas and no transform on the page. Home and completion are untouched. */
+.page:is(.step-1,.step-2,.step-3,.step-4){height:100dvh;min-height:0;overflow:hidden;--ui: min(calc(100vw / 1179),calc(100dvh / 2100))}
+.page:is(.step-1,.step-2,.step-3,.step-4) main{height:100%;overflow:hidden}
+.page:is(.step-1,.step-2,.step-3,.step-4) .nav{top:1.5dvh;width:21.3vw;height:auto;aspect-ratio:251/115}
+.page:is(.step-1,.step-2,.step-3,.step-4) .nav img{display:block}
+.step-1 .nav.back,.step-2 .nav.back,.step-4 .nav.back{left:5vw}
+.page:is(.step-1,.step-2,.step-3,.step-4) .nav.next{right:6.2vw}
+.step-1 main:before{top:72.1%;bottom:0;height:auto;background-color:#b4cbfd;background-image:radial-gradient(circle,#e7f0ff 0 23%,transparent 24%),radial-gradient(circle,#e7f0ff 0 23%,transparent 24%);background-size:18vw 10vw;background-position:3vw 0,12vw 5vw}
+.step-1 main:after{top:72.1%;height:2.9%;background:#fbb9fa}
+.step-1 .slot-0{left:15%;top:11.5%;width:38%;height:18%}
+.step-1 .slot-1{left:55%;top:17.8%;width:33%;height:10.5%}
+.step-1 .slot-2{left:53%;top:31.5%;width:30%;height:10%}
+.step-1 .slot-0 .container{transform:none}
+.step-1 .caption{display:none}
+.step-1 .gift-name{font-size:calc(60 * var(--ui));max-height:100%;top:30%}
+.step-1 .pack{left:23%;top:34.5%;width:18.5%;height:9%;opacity:1}
+.step-1 .pack:disabled{opacity:.35}
+.step-1 .inner-preview{position:absolute;left:14%;top:47%;margin:0;width:72%;height:49%;transition:top .55s ease,height .55s ease}
+.step-1 .inner-preview canvas{width:100%;height:100%;object-fit:contain}
+.step-1 .gift-prompt{display:none}
+.step-1.gift-wrapped .inner-preview{top:16.5%;height:48%;left:14%;width:72%}
+.step-1.gift-wrapped .gift-slots{visibility:hidden;pointer-events:none}
+.step-1.gift-wrapped main:before,.step-1.gift-wrapped main:after{top:73%}
+.step-1 .looks{position:absolute;left:12%;top:83.5%;width:76%;height:8.5%;margin:0}
+.step-1 .looks button{width:12%;height:100%}
+.step-1 .looks button.look-mid{width:46%;height:76%}
+.step-1.is-packing .gift-slots{animation:gifts-away .5s ease both}
+.step-1.is-packing .inner-preview{animation:box-settle .55s ease both}
+.step-1.is-packing .inner-preview{top:16.5%;height:48%}
+@keyframes gifts-away{to{opacity:0;translate:0 5dvh}}
+@keyframes box-settle{50%{translate:0 -2dvh}100%{translate:0 0}}
+.step-2 .letter-scene{position:absolute;inset:0;height:100%}
+.step-2 .letter-label{position:absolute;margin:0;padding:0;font-size:calc(50 * var(--ui));color:#858982;line-height:1.2}
+.step-2 .number-circle{width:calc(65 * var(--ui));height:calc(65 * var(--ui));font-size:calc(50 * var(--ui));border-width:calc(5 * var(--ui));margin-right:calc(24 * var(--ui))}
+.step-2 .write-label{left:16%;top:12.5%}
+.step-2 .letter-paper{left:26%;top:17.5%;width:53%;height:41%;transform:rotate(2deg);z-index:2}
+.step-2 .letter-paper>img{object-fit:fill}
+.step-2 .letter-copy{font-size:calc(32 * var(--ui))}
+.step-2 .envelope{position:absolute;left:10%;top:50%;width:74%;height:33%;margin:0;z-index:1}
+.step-2 .pen{left:59%;top:35.5%;width:32%;height:35%;z-index:4}
+.missing-art{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border:1px dashed #986686;background:#fff7fcdd;font-size:clamp(10px,calc(28 * var(--ui)),16px);text-align:center;white-space:normal;padding:6px}
+.step-2 .heart{left:62%;top:82.7%;width:18%;height:9%;z-index:4}
+.step-2 .heart.attached{left:45%;top:66%;width:17%;height:9%}
+.step-2 .tuck-label{left:12%;top:83.5%}
+.step-2 .seal-label{left:53%;top:94%}
+.step-2 .unseal-zone{left:18%;top:61%;width:65%;height:20%}
+.step-2 .open-letter{left:20%;top:79%;font-size:calc(36 * var(--ui))}
+.step-3{background:#ccc}
+.step-3 .nav.back{left:33.7vw}
+.step-3 .wrapping-workspace{position:absolute;inset:0;height:80.5%;width:100%}
+.step-3 .categories{width:28%;height:100%;background:linear-gradient(#fff,#f2f2f2)}
+.step-3 .categories button{left:16%;width:68%;height:19.2%;padding:5% 6%;background:#fabafa;border-radius:calc(36 * var(--ui))}
+.step-3 .categories button:nth-child(1){top:3.5%}
+.step-3 .categories button:nth-child(2){top:28.1%}
+.step-3 .categories button:nth-child(3){top:52.8%}
+.step-3 .categories button:nth-child(4){top:77.4%}
+.step-3 .categories .missing-art{height:76%;font-size:calc(24 * var(--ui));background:#ffffff66}
+.step-3 .categories img{height:76%;width:100%;object-fit:contain}
+.step-3 .categories span{font-size:calc(44 * var(--ui));line-height:1.3}
+.step-3 .chat{left:28%;width:72%;height:100%}
+.step-3 .bubble{border-radius:calc(56 * var(--ui));font-size:calc(44 * var(--ui))}
+.step-3 .bubble.small{left:45.5%;top:13.7%;width:49%;height:9.3%;font-size:calc(44 * var(--ui))}
+.step-3 .bubble:not(.small):not(.preview):not(.mint){left:24%;top:28.4%;width:70.5%;height:9.7%;font-size:calc(44 * var(--ui))}
+.step-3 .bubble.preview{left:6.5%;top:43.5%;width:88.5%;height:36.2%}
+.step-3 .bubble.preview canvas{left:0;top:-18%;width:100%;height:138%;object-fit:contain}
+.step-3 .bubble.preview .box-layers{position:absolute;left:0;top:-14%;width:100%;height:145%}
+.step-3 .bubble.preview .box-layers canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.step-3 .bubble.mint{left:5%;top:85.4%;width:70.5%;height:9.5%;font-size:calc(44 * var(--ui));background:#d3fff9}
+.step-3 .bubble.mint:after{background:#d3fff9}
+.page:is(.step-3,.step-4) .picker{position:absolute;left:0;top:80.5%;height:19.5%;background:linear-gradient(#fff,#f1f1f1);border:0}
+.page:is(.step-3,.step-4) .picker h2{height:21%;line-height:1.2;display:flex;align-items:center;justify-content:center;font-size:calc(44 * var(--ui))}
+.page:is(.step-3,.step-4) .picker h2:before,.page:is(.step-3,.step-4) .picker h2:after{top:50%;height:calc(20 * var(--ui));width:36%;left:5.5%;background:linear-gradient(90deg,#ddd,#fff);clip-path:polygon(0 50%,14% 0,14% 35%,100% 35%,100% 65%,14% 65%,14% 100%)}
+.page:is(.step-3,.step-4) .picker h2:after{left:auto;right:3.5%;transform:scaleX(-1)}
+.page:is(.step-3,.step-4) .picker h2 small{font-size:calc(18 * var(--ui));right:1%;bottom:2%}
+.page:is(.step-3,.step-4) .carousel{height:79%;touch-action:pan-y}
+.page:is(.step-3,.step-4) .track{height:100%;gap:calc(34 * var(--ui));width:100%}
+.page:is(.step-3,.step-4) .material{width:calc(252 * var(--ui));height:calc(252 * var(--ui));border:calc(7 * var(--ui)) solid white;padding:0;border-radius:calc(34 * var(--ui))}
+.page:is(.step-3,.step-4) .material.selected{width:calc(292 * var(--ui));height:calc(292 * var(--ui));border:calc(6 * var(--ui)) solid #f184df}
+.page:is(.step-3,.step-4) .material img{object-fit:cover}
+.page:is(.step-3,.step-4) .material span{display:none}
+.page:is(.step-3,.step-4) .picker .hint{bottom:0;font-size:calc(18 * var(--ui));pointer-events:none}
+.step-4 .rosette-work{position:absolute;inset:0;height:80.5%;width:100%}
+.step-4 .rosette-work #rosette-background{left:calc(65vw - max(320vw,180dvh) * .285);top:calc(25dvh - max(320vw,180dvh) * .456);width:max(320vw,180dvh);height:auto;transform:none}
+.step-4 .rosette-work #rosette-preview{left:33%;top:1%;width:65%;height:76%;object-fit:contain}
+.step-4 .rosette-layers canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.step-4 .bloom-parts{left:0;top:46%;width:100%;height:34.5%;background:linear-gradient(30deg,#fffef0ed,#fffef0d9);border-radius:0 100% 0 0;pointer-events:none}
+.step-4 .bloom-parts h2{left:6.8%;top:19%;font-size:calc(58 * var(--ui));font-weight:700;color:#ee519f}
+.step-4 .part-buttons button{width:18%;height:29%;background:#999;border-radius:calc(16 * var(--ui));padding:4%;pointer-events:auto}
+.step-4 .part-buttons [data-category=badge]{left:5%;top:32%}
+.step-4 .part-buttons [data-category=ribbon1]{left:5%;top:64%}
+.step-4 .part-buttons [data-category=ribbon2]{left:25.3%;top:64%}
+.step-4 .part-buttons [data-category=ribbon3]{left:45.5%;top:64%}
+.step-4 .part-buttons .missing-art{background:#999;border:0;color:white;padding:0;font-size:calc(24 * var(--ui))}
+.step-4 .part-buttons span:not(.missing-art){display:none}
+.step-4 .part-buttons span.part-icon{display:block;position:absolute;inset:8%;width:auto;overflow:hidden;background:none}
+.step-4 .part-buttons .part-icon img{position:absolute;height:auto;max-width:none;object-fit:initial}
+.step-4 .icon-badge img{width:273%;left:-87%;top:-74%}
+.step-4 .icon-ribbon1 img{width:195%;left:-48%;top:-39%}
+.step-4 .icon-ribbon2 img{width:118%;left:-9%;top:-4%}
+.step-4 .icon-ribbon3 img{width:92%;left:4%;top:7%}
+.step-4 .bloom-parts p{left:66.5%;top:82%;width:31%;font-size:calc(29 * var(--ui));line-height:1.3}
+@media(prefers-reduced-motion:reduce){.step-1.is-packing .gift-slots,.step-1.is-packing .inner-preview{animation:none}.step-1 .inner-preview{transition:none}}

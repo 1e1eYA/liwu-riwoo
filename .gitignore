@@ -1,0 +1,23 @@
+
+# Local creative uploads and isolated test databases
+.local-data/
+app/qa/gallery-flow-data/
+app/qa/service-check-*/
+site-dist/
+.env
+.env.*
+!.env.example
+
+# Local QA exports/logs and original planning/design materials are not published.
+app/qa/
+app/qa-zip.zip
+/*.docx
+/fronts/
+/moodboard/
+/plane/
+/wireframe/
+*.psd
+*.psb
+*.docx
+*.log
+*.zip

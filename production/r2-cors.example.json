@@ -1,0 +1,19 @@
+[
+  {
+    "AllowedOrigins": [
+      "https://YOUR_GITHUB_USERNAME.github.io"
+    ],
+    "AllowedMethods": [
+      "PUT",
+      "GET",
+      "HEAD"
+    ],
+    "AllowedHeaders": [
+      "Content-Type"
+    ],
+    "ExposeHeaders": [
+      "ETag"
+    ],
+    "MaxAgeSeconds": 3600
+  }
+]

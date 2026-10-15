@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self' https://*.supabase.co; img-src https://*.r2.cloudflarestorage.com blob:; base-uri 'none'; form-action 'none'">
+  <title>Liwu 管理员登录与审核队列</title>
+  <link rel="stylesheet" href="./admin-test.css">
+</head>
+<body><main>
+  <h1>管理员登录与审核队列</h1>
+  <p id="project"></p>
+  <p>使用现有 Supabase Auth 邮箱和密码。密码只发送给 Supabase Auth；access token 只保留在当前页面内存中，刷新后需重新登录。</p>
+  <form id="login-form">
+    <label>邮箱<input id="email" type="email" autocomplete="username" required></label>
+    <label>密码<input id="password" type="password" autocomplete="current-password" required></label>
+    <button id="login" type="submit">登录并读取队列</button>
+  </form>
+  <p id="session" role="status">尚未登录</p>
+  <div class="actions">
+    <button id="reload" type="button" disabled>重新读取队列</button>
+    <button id="logout" type="button" disabled>退出登录</button>
+    <button id="anonymous" type="button">验证未登录请求被拒绝</button>
+  </div>
+  <p id="result" role="status" aria-live="polite"></p>
+  <p id="anonymous-result" role="status"></p>
+  <div id="review-feedback-home"><pre id="review-result" role="status" aria-live="polite"></pre></div>
+  <section id="queue" hidden><h2>审核队列</h2><p id="summary"></p><div id="items"></div></section>
+  <p>审核操作仅用于 production 环境。启用 R2 后，两张图片 ready 才能 Approved；每次操作后核对编号、计数和公开列表。本页面不提供删除或清场按钮。非管理员请求应返回 HTTP 403。</p>
+</main><script type="module" src="./admin.js"></script></body></html>

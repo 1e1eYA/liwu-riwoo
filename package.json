@@ -1,0 +1,9 @@
+{
+  "name": "liwu-riwoo-production",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "build:production": "node tools/build-pages.mjs --config-file=production/frontend-config.json --out=site-dist --base=/liwu-riwoo/"
+  }
+}

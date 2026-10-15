@@ -1,0 +1,8 @@
+{
+  "mode": "supabase",
+  "environment": "production",
+  "mediaEnabled": true,
+  "moderationEnabled": true,
+  "supabaseUrl": "https://YOUR_PRODUCTION_PROJECT_REF.supabase.co",
+  "publishableKey": "sb_publishable_REPLACE_WITH_PRODUCTION_PUBLIC_KEY"
+}

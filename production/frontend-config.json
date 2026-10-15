@@ -1,0 +1,8 @@
+{
+  "mode": "supabase",
+  "environment": "production",
+  "mediaEnabled": true,
+  "moderationEnabled": true,
+  "supabaseUrl": "https://vqtjkpowzwrixyowegof.supabase.co",
+  "publishableKey": "sb_publishable_g9BL2b4eI57Cj3Kwo92VNQ_KVqTmxmw"
+}
