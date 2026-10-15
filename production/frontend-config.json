@@ -3,6 +3,10 @@
   "environment": "production",
   "mediaEnabled": true,
   "moderationEnabled": true,
+  "basePath": "/",
+  "siteUrl": "https://riwoo1022.com",
+  "basePath": "/",
+  "siteUrl": "https://riwoo1022.com",
   "supabaseUrl": "https://vqtjkpowzwrixyowegof.supabase.co",
   "publishableKey": "sb_publishable_g9BL2b4eI57Cj3Kwo92VNQ_KVqTmxmw"
 }

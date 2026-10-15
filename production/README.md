@@ -1,5 +1,8 @@
 # 全新 production：按此顺序部署
 
+当前已上线项目的域名已改为 riwoo1022.com，正式 base 为 `/`；现有项目不要重跑安装 SQL。
+域名接入只按 [CUSTOM_DOMAIN.md](CUSTOM_DOMAIN.md)，更新部署默认关闭 require_empty，不要求清零。
+
 本包基于 2026-10-15 最终代码。只适用于全新 Supabase 正式项目；本轮没有修改任何远程服务。
 不要执行旧 migrations、prepare-empty-production.sql 或测试部署文档。
 本包 SQL 不导入作品、不重放测试批次、不提供清场/重置动作；不转换现有 test 项目。

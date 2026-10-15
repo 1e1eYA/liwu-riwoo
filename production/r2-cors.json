@@ -1,0 +1,12 @@
+[
+  {
+    "AllowedOrigins": [
+      "https://riwoo1022.com",
+      "https://www.riwoo1022.com"
+    ],
+    "AllowedMethods": ["PUT", "GET", "HEAD"],
+    "AllowedHeaders": ["Content-Type"],
+    "ExposeHeaders": ["ETag"],
+    "MaxAgeSeconds": 3600
+  }
+]

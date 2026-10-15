@@ -7,7 +7,7 @@ on:
       require_empty:
         description: First launch requires Gifts and Gallery counts to be zero
         type: boolean
-        default: true
+        default: false
 permissions:
   contents: read
   pages: write
@@ -35,7 +35,7 @@ jobs:
           node --input-type=module <<'JS'
           import {writeFile} from 'node:fs/promises';
           if(!process.env.LIWU_URL||!process.env.LIWU_PUBLIC_KEY)throw Error('Missing public production variables');
-          await writeFile('production/frontend-config.json',JSON.stringify({mode:'supabase',environment:'production',mediaEnabled:true,moderationEnabled:true,supabaseUrl:process.env.LIWU_URL,publishableKey:process.env.LIWU_PUBLIC_KEY}));
+          await writeFile('production/frontend-config.json',JSON.stringify({mode:'supabase',environment:'production',mediaEnabled:true,moderationEnabled:true,basePath:'/',siteUrl:'https://riwoo1022.com',supabaseUrl:process.env.LIWU_URL,publishableKey:process.env.LIWU_PUBLIC_KEY}));
           JS
       - name: Build and validate production
         env:

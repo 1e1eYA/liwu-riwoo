@@ -11,8 +11,12 @@ if(environment!==BACKEND.environment)throw Error('Config/environment mismatch');
 if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(BACKEND.supabaseUrl))throw Error('Provide a valid Supabase project URL');
 if(environment==='production'&&(!args['config-file']||BACKEND.supabaseUrl===LOCAL_BACKEND.supabaseUrl||BACKEND.mode!=='supabase'||BACKEND.mediaEnabled!==true||BACKEND.moderationEnabled!==true))throw Error('Use an independent production config/project with media and moderation enabled');
 const repo=process.env.GITHUB_REPOSITORY?.split('/')[1];
-let base=args.base??(repo&&!repo.endsWith('.github.io')?'/'+repo+'/':'/');
+let base=args.base??BACKEND.basePath??(repo&&!repo.endsWith('.github.io')?'/'+repo+'/':'/');
 if(!/^\/(?:[a-zA-Z0-9_.-]+\/)*$/.test(base))throw Error('Use a base such as /riwoo/ or /');
+if(BACKEND.siteUrl){
+ const site=new URL(BACKEND.siteUrl);
+ if(site.protocol!=='https:'||site.pathname!=='/'||site.search||site.hash||site.username||site.password||base!=='/')throw Error('Custom-domain builds require an HTTPS origin and root base path');
+}
 if(!['test','production'].includes(environment))throw Error('Invalid deployment environment');
 if(!BACKEND.publishableKey.startsWith('sb_publishable_'))throw Error('Only a publishable key belongs in the static artifact');
 let runtime;
@@ -79,5 +83,5 @@ async function assets(relative){
 }
 for(const folder of ['assets','ui','app/fonts'])await assets(folder);
 await writeFile(path.join(out,'.nojekyll'),'');
-await writeFile(path.join(out,'deployment.json'),JSON.stringify({environment,batchId:runtime.batchId,base},null,2));
+await writeFile(path.join(out,'deployment.json'),JSON.stringify({environment,batchId:runtime.batchId,base,...(BACKEND.siteUrl?{siteUrl:BACKEND.siteUrl}:{})},null,2));
 console.log('Static Pages artifact: '+out+' (environment='+environment+', base='+base+')');
